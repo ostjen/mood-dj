@@ -1,6 +1,7 @@
 import pandas as pd 
 import numpy as np 
-
+import webbrowser
+pd.options.mode.chained_assignment = None
 
 df = pd.read_pickle('./music.pkl')
 
@@ -28,4 +29,14 @@ def specific(df,song = False,artist = False):
     else:
         df1['popularity'] = pd.to_numeric(df1['popularity'])
         return df1.loc[df1['popularity'].idxmax()]           #return most popular of the songs
+
+
+
+def access(df):
+		if(type(df['track_id'])) == str:
+				open_spotify = 'https://open.spotify.com/embed/track/' + df['track_id']
+		else:
+				open_spotify ='https://open.spotify.com/embed/track/'  + str(df['track_id'].iloc[0])
+		
+		webbrowser.open(open_spotify)
 
