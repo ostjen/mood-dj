@@ -3,10 +3,10 @@ import numpy as np
 import webbrowser
 pd.options.mode.chained_assignment = None
 
-df = pd.read_pickle('./music.pkl')
+df = pd.read_pickle('./data/music.pkl')
 
 
-def specific(df,song = False,artist = False):
+def find_song(df,song = False,artist = False):
     if song == False and artist == False:
         return 'no song or artist inserted'
     df1 = df.loc[df['track_name'] == song]
