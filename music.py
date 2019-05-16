@@ -23,8 +23,18 @@ class Song:
         genre_df = df.loc[df['genre'] == self.genre]
         genre_df = genre_df.sort_values('popularity',ascending = False)
         genre_df = genre_df[:100].sample()
-        track = Song(track_id = str(genre_df['track_id'].iloc[0]))
+        track    = Song(track_id = str(genre_df['track_id'].iloc[0]))
         track.play()
+
+    def play_sad(self,df):
+        df = df.sort_values('valence')
+        bad_mood = bad_mood[bad_mood.valence != '0.0']
+        bad_mood = bad_mood[400]
+        bad_mood = bad_mood.sort_values('popularity',ascending = False)
+        track    = bad_mood[:200].sample()
+        track    = Song(track_id = track['track_id'].iloc[0])
+        track.play()
+
 
 
 
