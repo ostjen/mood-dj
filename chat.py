@@ -14,7 +14,7 @@ classifier = TextClassifier.load_from_file(sys.argv[1])
 
 df = pd.read_pickle('./data/music.pkl')
 genres = set(df['genre'])
-user = 'I am really sad'     #for testing only
+user = 'i am sad'#'play some rap'     #for testing only
 
 sentence = Sentence(user)
 classifier.predict(sentence)
@@ -26,11 +26,12 @@ if (sentence.get_label_names()[0]) == 'g':
 	aux.play_genre(df)
 
 if (sentence.get_label_names()[0]) == 'm':
-	user_mood = user                     		#sentiment analysis
-	user_mood = Sentence(user_mood)
+	user_mood = Sentence(user)
 	mood.predict(user_mood)
 	if user_mood.get_label_names()[0] == 'NEGATIVE':
-		play_sad(df)
+		s = Song()
+		s.play_sad(df)
+		pass
 	else:
 		pass
 
