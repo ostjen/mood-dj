@@ -36,6 +36,15 @@ class Song:
         track    = Song(track_id = track['track_id'].iloc[0])
         track.play()
 
+    def play_happy(self,df):
+        df = df.sort_values('valence',ascending = False)
+        df = df[:400]
+        df = df.sort_values('popularity',ascending = False)
+        track  = df[:200].sample()
+        print(track)
+        track  = Song(track_id = track['track_id'].iloc[0])
+        track.play()
+
 
 
 
