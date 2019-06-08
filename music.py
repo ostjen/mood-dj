@@ -24,7 +24,9 @@ class Song:
         genre_df = genre_df.sort_values('popularity',ascending = False)
         genre_df = genre_df[:100].sample()
         track    = Song(track_id = str(genre_df['track_id'].iloc[0]))
-        track.play()
+        return genre_df
+        validation(df,)
+        #track.play()
 
     def play_sad(self,df):
         df = df.sort_values('valence')
@@ -62,3 +64,30 @@ def g_label(dic,genres):
     for word in words:
         if word in genres:
             return Song(genre = word)
+
+
+
+
+
+def validation(df,classifier):
+    play_tags = ['ok']
+    retry_tags = ['no']
+    play_t = ['ok']
+    retry = ['no']
+    print('what do you think about ',df['track_name'].iloc[0])
+    print('\n')
+    user_input = input()
+    user_input = user_input.split(' ') 
+    for word in user_input:
+        print(word)
+        if word in play_tags:
+             user_song.track_id = df['track_id'].iloc[0]
+             user_song.play()
+        elif word in retry_tags:
+             retry_song = user_song.play_genre()
+             
+
+
+
+              
+        
