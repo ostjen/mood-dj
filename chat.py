@@ -1,3 +1,8 @@
+
+
+#your love by the outfield  https://open.spotify.com/search/results/your%20love%20by%20the%20outfield
+
+
 import warnings
 warnings.filterwarnings(action='ignore', category=UserWarning, module='gensim')
 import pandas as pd
@@ -34,6 +39,7 @@ def runClassifier(text):
 		return
 	print('Running classifier for "', text, '"')
 	sentence = generic_input_classifier(text)
+	print("sentence: ", sentence)
 	if is_genre(sentence):
 		print('Is genre.')
 		current_genre = get_genre(sentence)
@@ -42,6 +48,9 @@ def runClassifier(text):
 		print('Is mood.')
 		mood_history.append(get_mood(sentence))
 		print(mood_history)
+	elif is_specific(sentence):
+		print('Is specific.')
+		print(sentence.get_label_names())
 	runSuggestionLoop()
 
 def runSuggestionLoop():
@@ -87,7 +96,10 @@ def is_genre(sentence):
 	return ((sentence.get_label_names()[0]) == 'g')
 
 def is_mood(sentence):
-	return ((sentence.get_label_names()[0]) == 'm')
+	return ((sentence.get_label_names()[0]) == 'm')	
+
+def is_specific(sentence):
+	return ((sentence.get_label_names()[0]) == 's')	
 
 def get_genre(sentence):
 	global genres
