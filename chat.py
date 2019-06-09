@@ -11,10 +11,12 @@ from flair.data import Sentence
 import sys
 from flair.models import SequenceTagger
 import webbrowser
+import re
 
 play_tags = ['ok','play','yes','sure','like','love','awesome','nice','yep','yeah']
 retry_tags = ['no','next','shuffle','hate','dislike','another','nope','nay','jeez','nah','ugh']
 #model loadings
+
 tagger = SequenceTagger.load('pos')
 mood = TextClassifier.load('en-sentiment')
 classifier = TextClassifier.load_from_file(sys.argv[1])
@@ -50,7 +52,14 @@ def runClassifier(text):
 		print(mood_history)
 	elif is_specific(sentence):
 		print('Is specific.')
-		print(sentence.get_label_names())
+		text = text.split()
+		if text[0].lower() == 'play':
+			text = text[1:]
+		text = re.sub('\s','%20',' '.join(text))
+		text2url = 'https://open.spotify.com/search/results/' + text
+		webbrowser.open(text2url)
+		runApplication()
+
 	runSuggestionLoop()
 
 def runSuggestionLoop():
