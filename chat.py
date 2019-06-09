@@ -18,7 +18,7 @@ retry_tags = ['no','next','shuffle','hate','dislike','another','nope','nay','jee
 #model loadings
 
 tagger = SequenceTagger.load('pos')
-mood = TextClassifier.load('en-sentiment')
+smood = TextClassifier.load('en-sentiment')
 classifier = TextClassifier.load_from_file(sys.argv[1])
 
 
@@ -59,6 +59,7 @@ def runClassifier(text):
 		text2url = 'https://open.spotify.com/search/results/' + text
 		webbrowser.open(text2url)
 		runApplication()
+
 
 	runSuggestionLoop()
 
