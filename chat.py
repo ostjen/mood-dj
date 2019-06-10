@@ -1,8 +1,3 @@
-
-
-#your love by the outfield  https://open.spotify.com/search/results/your%20love%20by%20the%20outfield
-
-
 import warnings
 warnings.filterwarnings(action='ignore', category=UserWarning, module='gensim')
 import pandas as pd
