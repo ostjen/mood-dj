@@ -8,12 +8,13 @@ from flair.models import SequenceTagger
 import webbrowser
 import re
 
+debug = False
 play_tags = ['ok','play','yes','sure','like','love','awesome','nice','yep','yeah']
-retry_tags = ['no','next','shuffle','hate','dislike','another','nope','nay','jeez','nah','ugh']
+retry_tags = ['no','next','shuffle','hate','dislike','another','nope','nay','jeez','nah','ugh','not']
 #model loadings
 
 tagger = SequenceTagger.load('pos')
-smood = TextClassifier.load('en-sentiment')
+mood = TextClassifier.load('en-sentiment')
 classifier = TextClassifier.load_from_file(sys.argv[1])
 
 
@@ -25,6 +26,11 @@ genres = set(df['genre'])
 mood_history = []
 current_genre = False
 
+def debug_print(*objects):
+	global debug
+	if(debug):
+		print(objects)
+
 def runApplication():
 	text = get_generic_input()
 	runClassifier(text)
@@ -34,19 +40,19 @@ def runClassifier(text):
 	if len(text) == 0:
 		runApplication()
 		return
-	print('Running classifier for "', text, '"')
+	debug_print('Running classifier for "', text, '"')
 	sentence = generic_input_classifier(text)
-	print("sentence: ", sentence)
+	debug_print("sentence: ", sentence)
 	if is_genre(sentence):
-		print('Is genre.')
+		debug_print('Is genre.')
 		current_genre = get_genre(sentence)
-		print('Current genre: ', current_genre)
+		debug_print('Current genre: ', current_genre)
 	elif is_mood(sentence):
-		print('Is mood.')
+		debug_print('Is mood.')
 		mood_history.append(get_mood(sentence))
-		print(mood_history)
+		debug_print(mood_history)
 	elif is_specific(sentence):
-		print('Is specific.')
+		debug_print('Is specific.')
 		text = text.split()
 		if text[0].lower() == 'play':
 			text = text[1:]
@@ -59,17 +65,17 @@ def runClassifier(text):
 	runSuggestionLoop()
 
 def runSuggestionLoop():
-	print('Running suggestion loop.')
+	debug_print('Running suggestion loop.')
 	suggestion = get_suggestion()
 	reply = get_suggestion_reply(suggestion)
 	if reply == 'play':
-		print('Playing.')
+		debug_print('Playing.')
 		play(suggestion)
 	elif reply == 'retry':
-		print('Retrying.')
+		debug_print('Retrying.')
 		runSuggestionLoop()
 	else:
-		print('Running classifier again.')
+		debug_print('Running classifier again.')
 		runClassifier(reply)
 
 def get_nouns(dic):
@@ -86,7 +92,7 @@ def g_label(dic,genres):
             return word
 
 def get_generic_input():
-	print('How are you feeling today? Or which genre would you like to listen to?\n')
+	print('How are you feeling today? Or what would you like to hear?\n')
 	generic_input = input()
 	return generic_input
 
@@ -119,15 +125,15 @@ def get_mood(sentence):
 
 def get_suggestion():
 	global df
-	print("Generating suggestion")
+	debug_print("Generating suggestion")
 	suggestion = df
-	print('get_suggestion() current_genre: ', current_genre)
+	debug_print('get_suggestion() current_genre: ', current_genre)
 	if current_genre != False:
-		print("Has genre: ", current_genre)
-		suggestion = df.loc[df['genre'] == current_genre]
+		debug_print("Has genre: ", current_genre)
+		suggestion = suggestion.loc[df['genre'] == current_genre]
 	if len(mood_history) >= 1:
 		last_mood = mood_history[-1]
-		print('last_mood: ', last_mood)
+		debug_print('last_mood: ', last_mood)
 		negative = (last_mood.get_label_names()[0] == 'NEGATIVE')
 		suggestion = suggestion.sort_values('valence',ascending = negative)
 			
@@ -137,12 +143,13 @@ def get_suggestion():
 
 def get_suggestion_reply(suggestion):
 	global play_tags, retry_tags
-	print('what do you think about \nArtist: ', get_artist(suggestion), '\nTrack: ', get_track_name(suggestion), '\nGenre: ', get_track_genre(suggestion), '\n')
+	print('\nWhat do you think about \nArtist: ', get_artist(suggestion), '\nTrack: ', get_track_name(suggestion), '\nGenre: ', get_track_genre(suggestion), '\n')
 	reply = input()
 	for word in reply.split(' '):
 		if word in play_tags:
 			return 'play'
 		elif word in retry_tags:
+			print('\nhmmm... ok\n')
 			return 'retry'
 	return reply
 
