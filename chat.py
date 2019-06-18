@@ -7,16 +7,16 @@ import sys
 from flair.models import SequenceTagger
 import webbrowser
 import re
+import os
 
 debug = False
-play_tags = ['ok','play','yes','sure','like','love','awesome','nice','yep','yeah']
+play_tags = ['ok','play','yes','sure','like','love','awesome','nice','yep','yeah','good']
 retry_tags = ['no','next','shuffle','hate','dislike','another','nope','nay','jeez','nah','ugh','not']
 #model loadings
 
 tagger = SequenceTagger.load('pos')
 mood = TextClassifier.load('en-sentiment')
 classifier = TextClassifier.load_from_file(sys.argv[1])
-
 
 df = pd.read_pickle('./data/music.pkl')
 df = df.loc[df['valence'] != '0.0']
@@ -31,9 +31,11 @@ def debug_print(*objects):
 	if(debug):
 		print(objects)
 
+
 def runApplication():
 	text = get_generic_input()
 	runClassifier(text)
+
 
 def runClassifier(text):
 	global current_genre, mood_history
@@ -170,5 +172,9 @@ def play(suggestion):
 	text = input()
 	runClassifier(text)
 
-#aqui começa tudo
-runApplication()
+#start
+if __name__ == '__main__':
+    os.system('clear')
+    runApplication()
+
+
