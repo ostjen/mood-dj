@@ -16,8 +16,7 @@ retry_tags = ['no','next','shuffle','hate','dislike','another','nope','nay','jee
 
 tagger = SequenceTagger.load('pos')
 mood = TextClassifier.load('en-sentiment')
-classifier = TextClassifier.load_from_file(sys.argv[1])
-
+classifier = TextClassifier.load(sys.argv[1])
 df = pd.read_pickle('./data/music.pkl')
 df = df.loc[df['valence'] != '0.0']
 
